@@ -1,6 +1,9 @@
-import "./App.css";
 import { useState } from "react";
 import { v4 as uuidv4 } from "uuid";
+import "./App.css";
+import MemoList from "./MemoList.js";
+import MemoContent from "./MemoContent.js";
+import AddButton from "./AddButton.js";
 
 function App() {
   let registeredMemo =
@@ -90,79 +93,6 @@ function App() {
       </div>
     );
   }
-}
-
-function MemoList({ memos, onSelectMemo, onTextChange, onStatusChange }) {
-  return (
-    <ul>
-      {memos.map((memo) => (
-        <li
-          key={memo.id}
-          onClick={(e) => {
-            onSelectMemo(memo.id);
-            onTextChange(memo.content);
-            onStatusChange("isEditing");
-          }}
-        >
-          {memo.content.substring(0, memo.content.indexOf("\n")) ||
-            memo.content}
-        </li>
-      ))}
-    </ul>
-  );
-}
-
-function MemoContent({
-  onStatusChange,
-  text,
-  selectedId,
-  onTextChange,
-  onMemoChange,
-  onMemoDelete,
-}) {
-  return (
-    <div className="form">
-      <textarea
-        id="memo"
-        value={text}
-        onChange={(e) => onTextChange(e.target.value)}
-      />
-      <br />
-      <button
-        onClick={() => {
-          onMemoChange(selectedId, text);
-          onStatusChange("isDisplaying");
-          alert("メモを保存しました。");
-        }}
-      >
-        編集
-      </button>
-      <button
-        onClick={() => {
-          onMemoDelete(selectedId);
-          onStatusChange("isDisplaying");
-          alert("メモを削除しました。");
-        }}
-      >
-        削除
-      </button>
-    </div>
-  );
-}
-
-function AddButton({ onStatusChange, onMemoAdd }) {
-  return (
-    <div className="add-button">
-      <button
-        onClick={() => {
-          onMemoAdd("新規メモ");
-          onStatusChange("isEditing");
-        }}
-      >
-        +
-      </button>
-    </div>
-  );
 }
 
 export default App;
