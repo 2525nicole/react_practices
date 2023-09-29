@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { v4 as uuidv4 } from "uuid";
 import "./App.css";
 import MemoList from "./MemoList.js";
@@ -21,7 +21,6 @@ function App() {
     setSelectedId(nextMemos[nextMemos.length - 1].id);
     setText(nextMemos[nextMemos.length - 1].content);
     setMemos(nextMemos);
-    saveMemos(nextMemos);
   }
 
   function handleMemoChange(id, text) {
@@ -36,13 +35,11 @@ function App() {
       }
     });
     setMemos(nextMemos);
-    saveMemos(nextMemos);
   }
 
   function handleMemoDelete(deleteId) {
     const nextMemos = memos.filter((memo) => memo.id !== deleteId);
     setMemos(nextMemos);
-    saveMemos(nextMemos);
   }
 
   function handleTextChange(text) {
@@ -53,10 +50,10 @@ function App() {
     setSelectedId(id);
   }
 
-  function saveMemos(memos) {
+  useEffect(() => {
     const memosString = JSON.stringify(memos);
     localStorage.setItem("Memos", memosString);
-  }
+  }, [memos]);
 
   const noMemos = localStorage.getItem("Memos") === null || memos.length === 0;
 
