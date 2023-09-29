@@ -6,7 +6,7 @@ import MemoContent from "./MemoContent.js";
 import AddButton from "./AddButton.js";
 
 function App() {
-  let registeredMemo =
+  const registeredMemo =
     localStorage.getItem("Memos") === null
       ? []
       : JSON.parse(localStorage.getItem("Memos"));
@@ -17,16 +17,15 @@ function App() {
   const [selectedId, setSelectedId] = useState("");
 
   function handleMemoAdd(text) {
-    let nextMemos = [...memos, { id: uuidv4(), content: text }];
+    const nextMemos = [...memos, { id: uuidv4(), content: text }];
     setSelectedId(nextMemos[nextMemos.length - 1].id);
     setText(nextMemos[nextMemos.length - 1].content);
     setMemos(nextMemos);
-    nextMemos = JSON.stringify(nextMemos);
-    localStorage.setItem("Memos", nextMemos);
+    saveMemos(nextMemos);
   }
 
   function handleMemoChange(id, text) {
-    let nextMemos = memos.map((memo) => {
+    const nextMemos = memos.map((memo) => {
       if (memo.id === id) {
         return {
           ...memo,
@@ -37,62 +36,60 @@ function App() {
       }
     });
     setMemos(nextMemos);
-    nextMemos = JSON.stringify(nextMemos);
-    localStorage.setItem("Memos", nextMemos);
+    saveMemos(nextMemos);
   }
 
-  function handleDeleteMemo(deleteId) {
-    let nextMemos = memos.filter((memo) => memo.id !== deleteId);
+  function handleMemoDelete(deleteId) {
+    const nextMemos = memos.filter((memo) => memo.id !== deleteId);
     setMemos(nextMemos);
-    nextMemos = JSON.stringify(nextMemos);
-    localStorage.setItem("Memos", nextMemos);
+    saveMemos(nextMemos);
   }
 
   function handleTextChange(text) {
     setText(text);
   }
 
-  function handleSelectMemo(id) {
+  function handleMemoSelect(id) {
     setSelectedId(id);
   }
 
-  if (localStorage.getItem("Memos") === null || memos.length === 0) {
-    return (
-      <div className="App">
-        <div className="list-container">
+  function saveMemos(memos) {
+    const memosString = JSON.stringify(memos);
+    localStorage.setItem("Memos", memosString);
+  }
+
+  const noMemos = localStorage.getItem("Memos") === null || memos.length === 0;
+
+  return (
+    <div className="App">
+      <div className="list-container">
+        {noMemos ? (
           <div className="no-memos">
             <p>メモの登録はありません</p>
           </div>
-          <AddButton onStatusChange={setStatus} onMemoAdd={handleMemoAdd} />
-        </div>
-      </div>
-    );
-  } else {
-    return (
-      <div className="App">
-        <div className="list-container">
+        ) : (
           <MemoList
             memos={memos}
             onStatusChange={setStatus}
-            onSelectMemo={handleSelectMemo}
+            onMemoSelect={handleMemoSelect}
             onTextChange={handleTextChange}
-          />
-          <AddButton onStatusChange={setStatus} onMemoAdd={handleMemoAdd} />
-        </div>
-        {status === "isEditing" && (
-          <MemoContent
-            key={selectedId}
-            onStatusChange={setStatus}
-            text={text}
-            onTextChange={handleTextChange}
-            onMemoChange={handleMemoChange}
-            onMemoDelete={handleDeleteMemo}
-            selectedId={selectedId}
           />
         )}
+        <AddButton onMemoAdd={handleMemoAdd} onStatusChange={setStatus} />
       </div>
-    );
-  }
+      {status === "isEditing" && (
+        <MemoContent
+          key={selectedId}
+          onStatusChange={setStatus}
+          text={text}
+          onTextChange={handleTextChange}
+          onMemoChange={handleMemoChange}
+          onMemoDelete={handleMemoDelete}
+          selectedId={selectedId}
+        />
+      )}
+    </div>
+  );
 }
 
 export default App;

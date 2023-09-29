@@ -1,6 +1,6 @@
 import "./App.css";
 
-function AddButton({ onStatusChange, onMemoAdd }) {
+function AddButton({ onMemoAdd, onStatusChange }) {
   return (
     <div className="add-button">
       <button

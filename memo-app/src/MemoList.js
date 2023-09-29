@@ -1,13 +1,13 @@
 import "./App.css";
 
-function MemoList({ memos, onSelectMemo, onTextChange, onStatusChange }) {
+function MemoList({ memos, onMemoSelect, onTextChange, onStatusChange }) {
   return (
     <ul>
       {memos.map((memo) => (
         <li
           key={memo.id}
           onClick={(e) => {
-            onSelectMemo(memo.id);
+            onMemoSelect(memo.id);
             onTextChange(memo.content);
             onStatusChange("isEditing");
           }}
