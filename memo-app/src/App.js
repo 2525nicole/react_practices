@@ -30,9 +30,8 @@ function App() {
           ...memo,
           content: text,
         };
-      } else {
-        return memo;
       }
+      return memo;
     });
     setMemos(nextMemos);
   }
@@ -51,8 +50,8 @@ function App() {
   }
 
   useEffect(() => {
-    const memosString = JSON.stringify(memos);
-    localStorage.setItem("Memos", memosString);
+    const memosJson = JSON.stringify(memos);
+    localStorage.setItem("Memos", memosJson);
   }, [memos]);
 
   const noMemos = localStorage.getItem("Memos") === null || memos.length === 0;
