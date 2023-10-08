@@ -65,12 +65,20 @@ function App() {
             <p>メモの登録はありません</p>
           </div>
         ) : (
-          <MemoList
-            memos={memos}
-            onStatusChange={setStatus}
-            onMemoSelect={handleMemoSelect}
-            onTextChange={handleTextChange}
-          />
+          <>
+            {status === "afterDeletion" && (
+              <p className="deletion-message">メモを削除しました</p>
+            )}
+            {status === "afterSaving" && (
+              <p className="saving-message">メモを保存しました</p>
+            )}
+            <MemoList
+              memos={memos}
+              onStatusChange={setStatus}
+              onMemoSelect={handleMemoSelect}
+              onTextChange={handleTextChange}
+            />
+          </>
         )}
         <AddButton onMemoAdd={handleMemoAdd} onStatusChange={setStatus} />
       </div>

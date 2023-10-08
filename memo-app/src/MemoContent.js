@@ -19,8 +19,7 @@ function MemoContent({
       <button
         onClick={() => {
           onMemoChange(selectedId, text);
-          onStatusChange("isDisplaying");
-          alert("メモを保存しました。");
+          onStatusChange("afterSaving");
         }}
       >
         編集
@@ -28,8 +27,7 @@ function MemoContent({
       <button
         onClick={() => {
           onMemoDelete(selectedId);
-          onStatusChange("isDisplaying");
-          alert("メモを削除しました。");
+          onStatusChange("afterDeletion");
         }}
       >
         削除

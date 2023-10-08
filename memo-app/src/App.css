@@ -53,3 +53,13 @@ textarea {
   margin: 10px 10px;
   width: 30%;
 }
+
+.deletion-message {
+  margin: 0;
+  color: red;
+}
+
+.saving-message {
+  margin: 0;
+  color: blue;
+}
