@@ -6,12 +6,10 @@ import MemoContent from "./MemoContent.js";
 import AddButton from "./AddButton.js";
 
 function App() {
-  const registeredMemo =
-    localStorage.getItem("Memos") === null
-      ? []
-      : JSON.parse(localStorage.getItem("Memos"));
-
-  const [memos, setMemos] = useState(registeredMemo);
+  const [memos, setMemos] = useState(() => {
+    const storedData = localStorage.getItem("Memos");
+    return storedData ? JSON.parse(storedData) : [];
+  });
   const [status, setStatus] = useState("isDisplaying");
   const [text, setText] = useState("");
   const [selectedId, setSelectedId] = useState("");
