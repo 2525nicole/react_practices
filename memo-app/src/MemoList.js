@@ -6,7 +6,7 @@ function MemoList({ memos, onMemoSelect, onTextChange, onStatusChange }) {
       {memos.map((memo) => (
         <li
           key={memo.id}
-          onClick={(e) => {
+          onClick={() => {
             onMemoSelect(memo.id);
             onTextChange(memo.content);
             onStatusChange("isEditing");
