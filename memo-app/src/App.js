@@ -4,6 +4,7 @@ import "./App.css";
 import MemoList from "./MemoList.js";
 import MemoContent from "./MemoContent.js";
 import AddButton from "./AddButton.js";
+import LoginButton from "./LoginButton.js";
 
 function App() {
   const [memos, setMemos] = useState(() => {
@@ -13,6 +14,7 @@ function App() {
   const [status, setStatus] = useState("isDisplaying");
   const [text, setText] = useState("");
   const [selectedId, setSelectedId] = useState("");
+  const [loggedIn, setLoggedIn] = useState(false);
 
   function handleMemoAdd(text) {
     const nextMemos = [...memos, { id: uuidv4(), content: text }];
@@ -47,6 +49,11 @@ function App() {
     setSelectedId(id);
   }
 
+  function handleLoggedInChange() {
+    setLoggedIn(!loggedIn);
+    setStatus("isDisplaying");
+  }
+
   useEffect(() => {
     const memosJson = JSON.stringify(memos);
     localStorage.setItem("Memos", memosJson);
@@ -77,7 +84,9 @@ function App() {
             />
           </>
         )}
-        <AddButton onMemoAdd={handleMemoAdd} onStatusChange={setStatus} />
+        {loggedIn && (
+          <AddButton onMemoAdd={handleMemoAdd} onStatusChange={setStatus} />
+        )}
       </div>
       {status === "isEditing" && (
         <MemoContent
@@ -88,8 +97,13 @@ function App() {
           onMemoChange={handleMemoChange}
           onMemoDelete={handleMemoDelete}
           selectedId={selectedId}
+          loggedIn={loggedIn}
         />
       )}
+      <LoginButton
+        loggedIn={loggedIn}
+        onLoggedInChange={handleLoggedInChange}
+      />
     </div>
   );
 }
