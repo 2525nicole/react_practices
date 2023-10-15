@@ -5,6 +5,7 @@ import MemoList from "./MemoList.js";
 import MemoContent from "./MemoContent.js";
 import AddButton from "./AddButton.js";
 import LoginButton from "./LoginButton.js";
+import { LoggedInContext } from "./Context.js";
 
 function App() {
   const [memos, setMemos] = useState(() => {
@@ -63,47 +64,45 @@ function App() {
 
   return (
     <div className="App">
-      <div className="list-container">
-        {noMemos ? (
-          <div className="no-memos">
-            <p>メモの登録はありません</p>
-          </div>
-        ) : (
-          <>
-            {status === "afterDeletion" && (
-              <p className="deletion-message">メモを削除しました</p>
-            )}
-            {status === "afterSaving" && (
-              <p className="saving-message">メモを保存しました</p>
-            )}
-            <MemoList
-              memos={memos}
-              onStatusChange={setStatus}
-              onMemoSelect={handleMemoSelect}
-              onTextChange={handleTextChange}
-            />
-          </>
+      <LoggedInContext.Provider value={loggedIn}>
+        <div className="list-container">
+          {noMemos ? (
+            <div className="no-memos">
+              <p>メモの登録はありません</p>
+            </div>
+          ) : (
+            <>
+              {status === "afterDeletion" && (
+                <p className="deletion-message">メモを削除しました</p>
+              )}
+              {status === "afterSaving" && (
+                <p className="saving-message">メモを保存しました</p>
+              )}
+              <LoginButton onLoggedInChange={handleLoggedInChange} />
+              <MemoList
+                memos={memos}
+                onStatusChange={setStatus}
+                onMemoSelect={handleMemoSelect}
+                onTextChange={handleTextChange}
+              />
+            </>
+          )}
+          {loggedIn && (
+            <AddButton onMemoAdd={handleMemoAdd} onStatusChange={setStatus} />
+          )}
+        </div>
+        {status === "isEditing" && (
+          <MemoContent
+            key={selectedId}
+            onStatusChange={setStatus}
+            text={text}
+            onTextChange={handleTextChange}
+            onMemoChange={handleMemoChange}
+            onMemoDelete={handleMemoDelete}
+            selectedId={selectedId}
+          />
         )}
-        {loggedIn && (
-          <AddButton onMemoAdd={handleMemoAdd} onStatusChange={setStatus} />
-        )}
-      </div>
-      {status === "isEditing" && (
-        <MemoContent
-          key={selectedId}
-          onStatusChange={setStatus}
-          text={text}
-          onTextChange={handleTextChange}
-          onMemoChange={handleMemoChange}
-          onMemoDelete={handleMemoDelete}
-          selectedId={selectedId}
-          loggedIn={loggedIn}
-        />
-      )}
-      <LoginButton
-        loggedIn={loggedIn}
-        onLoggedInChange={handleLoggedInChange}
-      />
+      </LoggedInContext.Provider>
     </div>
   );
 }

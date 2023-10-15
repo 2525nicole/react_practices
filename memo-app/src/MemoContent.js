@@ -1,4 +1,6 @@
+import { useContext } from "react";
 import "./App.css";
+import { LoggedInContext } from "./Context.js";
 
 function MemoContent({
   onStatusChange,
@@ -7,8 +9,8 @@ function MemoContent({
   onTextChange,
   onMemoChange,
   onMemoDelete,
-  loggedIn,
 }) {
+  const loggedIn = useContext(LoggedInContext);
   return (
     <div className="form">
       <textarea

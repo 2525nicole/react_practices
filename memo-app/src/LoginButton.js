@@ -1,12 +1,13 @@
+import { useContext } from "react";
 import "./App.css";
+import { LoggedInContext } from "./Context.js";
 
-function LoginButton({ loggedIn, onLoggedInChange }) {
+function LoginButton({ onLoggedInChange }) {
+  const loggedIn = useContext(LoggedInContext);
   return (
-    <div className="login-button">
-      <button onClick={onLoggedInChange}>
-        {loggedIn ? "ログアウト" : "ログイン"}
-      </button>
-    </div>
+    <button onClick={onLoggedInChange}>
+      {loggedIn ? "ログアウト" : "ログイン"}
+    </button>
   );
 }
 
