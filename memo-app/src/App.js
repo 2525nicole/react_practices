@@ -12,7 +12,7 @@ function App() {
     const storedData = localStorage.getItem("Memos");
     return storedData ? JSON.parse(storedData) : [];
   });
-  const [status, setStatus] = useState("isDisplaying");
+  const [appStatus, setAppStatus] = useState("isDisplaying");
   const [text, setText] = useState("");
   const [selectedId, setSelectedId] = useState("");
 
@@ -60,34 +60,36 @@ function App() {
     <div className="App">
       <LoginStatusProvider>
         <div className="list-container">
-          <LoginButton onStatusChange={setStatus} />
+          <LoginButton onAppStatusChange={setAppStatus} />
           {noMemos ? (
             <div className="no-memos">
               <p>メモの登録はありません</p>
             </div>
           ) : (
             <>
-              {status === "afterDeletion" && (
+              {appStatus === "afterDeletion" && (
                 <p className="deletion-message">メモを削除しました</p>
               )}
-              {status === "afterSaving" && (
+              {appStatus === "afterSaving" && (
                 <p className="saving-message">メモを保存しました</p>
               )}
               <MemoList
                 memos={memos}
-                onStatusChange={setStatus}
+                onAppStatusChange={setAppStatus}
                 onMemoSelect={handleMemoSelect}
                 onTextChange={handleTextChange}
               />
             </>
           )}
-          <AddButton onMemoAdd={handleMemoAdd} onStatusChange={setStatus} />
-          {/* )} */}
+          <AddButton
+            onMemoAdd={handleMemoAdd}
+            onAppStatusChange={setAppStatus}
+          />
         </div>
-        {status === "isEditing" && (
+        {appStatus === "isEditing" && (
           <MemoContent
             key={selectedId}
-            onStatusChange={setStatus}
+            onAppStatusChange={setAppStatus}
             text={text}
             onTextChange={handleTextChange}
             onMemoChange={handleMemoChange}

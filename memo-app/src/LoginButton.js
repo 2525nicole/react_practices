@@ -1,13 +1,13 @@
 import "./App.css";
 import { useLoginStatus } from "./LoginContext.js";
 
-function LoginButton({ onStatusChange }) {
+function LoginButton({ onAppStatusChange }) {
   const { loggedIn, setLoggedIn } = useLoginStatus();
   return (
     <button
       onClick={() => {
         setLoggedIn(!loggedIn);
-        onStatusChange("isDisplaying");
+        onAppStatusChange("isDisplaying");
       }}
     >
       {loggedIn ? "ログアウト" : "ログイン"}

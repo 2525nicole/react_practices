@@ -2,7 +2,7 @@ import "./App.css";
 import { useLoginStatus } from "./LoginContext.js";
 
 function MemoContent({
-  onStatusChange,
+  onAppStatusChange,
   text,
   selectedId,
   onTextChange,
@@ -25,7 +25,7 @@ function MemoContent({
           <button
             onClick={() => {
               onMemoChange(selectedId, text);
-              onStatusChange("afterSaving");
+              onAppStatusChange("afterSaving");
             }}
           >
             編集
@@ -33,7 +33,7 @@ function MemoContent({
           <button
             onClick={() => {
               onMemoDelete(selectedId);
-              onStatusChange("afterDeletion");
+              onAppStatusChange("afterDeletion");
             }}
           >
             削除
