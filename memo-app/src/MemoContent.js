@@ -1,37 +1,45 @@
 import "./App.css";
+import { useLoginStatus } from "./LoginContext.js";
 
 function MemoContent({
-  onStatusChange,
+  onAppStatusChange,
   text,
   selectedId,
   onTextChange,
   onMemoChange,
   onMemoDelete,
 }) {
+  const { loggedIn } = useLoginStatus();
+
   return (
     <div className="form">
       <textarea
         id="memo"
         value={text}
+        disabled={!loggedIn}
         onChange={(e) => onTextChange(e.target.value)}
       />
       <br />
-      <button
-        onClick={() => {
-          onMemoChange(selectedId, text);
-          onStatusChange("afterSaving");
-        }}
-      >
-        編集
-      </button>
-      <button
-        onClick={() => {
-          onMemoDelete(selectedId);
-          onStatusChange("afterDeletion");
-        }}
-      >
-        削除
-      </button>
+      {loggedIn && (
+        <div>
+          <button
+            onClick={() => {
+              onMemoChange(selectedId, text);
+              onAppStatusChange("afterSaving");
+            }}
+          >
+            編集
+          </button>
+          <button
+            onClick={() => {
+              onMemoDelete(selectedId);
+              onAppStatusChange("afterDeletion");
+            }}
+          >
+            削除
+          </button>
+        </div>
+      )}
     </div>
   );
 }

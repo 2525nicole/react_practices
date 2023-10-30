@@ -4,13 +4,15 @@ import "./App.css";
 import MemoList from "./MemoList.js";
 import MemoContent from "./MemoContent.js";
 import AddButton from "./AddButton.js";
+import LoginButton from "./LoginButton.js";
+import { LoginStatusProvider } from "./LoginContext.js";
 
 function App() {
   const [memos, setMemos] = useState(() => {
     const storedData = localStorage.getItem("Memos");
     return storedData ? JSON.parse(storedData) : [];
   });
-  const [status, setStatus] = useState("isDisplaying");
+  const [appStatus, setAppStatus] = useState("isDisplaying");
   const [text, setText] = useState("");
   const [selectedId, setSelectedId] = useState("");
 
@@ -56,40 +58,46 @@ function App() {
 
   return (
     <div className="App">
-      <div className="list-container">
-        {noMemos ? (
-          <div className="no-memos">
-            <p>メモの登録はありません</p>
-          </div>
-        ) : (
-          <>
-            {status === "afterDeletion" && (
-              <p className="deletion-message">メモを削除しました</p>
-            )}
-            {status === "afterSaving" && (
-              <p className="saving-message">メモを保存しました</p>
-            )}
-            <MemoList
-              memos={memos}
-              onStatusChange={setStatus}
-              onMemoSelect={handleMemoSelect}
-              onTextChange={handleTextChange}
-            />
-          </>
+      <LoginStatusProvider>
+        <div className="list-container">
+          <LoginButton onAppStatusChange={setAppStatus} />
+          {noMemos ? (
+            <div className="no-memos">
+              <p>メモの登録はありません</p>
+            </div>
+          ) : (
+            <>
+              {appStatus === "afterDeletion" && (
+                <p className="deletion-message">メモを削除しました</p>
+              )}
+              {appStatus === "afterSaving" && (
+                <p className="saving-message">メモを保存しました</p>
+              )}
+              <MemoList
+                memos={memos}
+                onAppStatusChange={setAppStatus}
+                onMemoSelect={handleMemoSelect}
+                onTextChange={handleTextChange}
+              />
+            </>
+          )}
+          <AddButton
+            onMemoAdd={handleMemoAdd}
+            onAppStatusChange={setAppStatus}
+          />
+        </div>
+        {appStatus === "isEditing" && (
+          <MemoContent
+            key={selectedId}
+            onAppStatusChange={setAppStatus}
+            text={text}
+            onTextChange={handleTextChange}
+            onMemoChange={handleMemoChange}
+            onMemoDelete={handleMemoDelete}
+            selectedId={selectedId}
+          />
         )}
-        <AddButton onMemoAdd={handleMemoAdd} onStatusChange={setStatus} />
-      </div>
-      {status === "isEditing" && (
-        <MemoContent
-          key={selectedId}
-          onStatusChange={setStatus}
-          text={text}
-          onTextChange={handleTextChange}
-          onMemoChange={handleMemoChange}
-          onMemoDelete={handleMemoDelete}
-          selectedId={selectedId}
-        />
-      )}
+      </LoginStatusProvider>
     </div>
   );
 }

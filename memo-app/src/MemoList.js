@@ -2,14 +2,14 @@ import React, { useCallback, memo } from "react";
 import "./App.css";
 
 const MemoList = memo(
-  ({ memos, onMemoSelect, onTextChange, onStatusChange }) => {
+  ({ memos, onMemoSelect, onTextChange, onAppStatusChange }) => {
     const handleMemoClick = useCallback(
       (memo) => {
         onMemoSelect(memo.id);
         onTextChange(memo.content);
-        onStatusChange("isEditing");
+        onAppStatusChange("isEditing");
       },
-      [onMemoSelect, onTextChange, onStatusChange],
+      [onMemoSelect, onTextChange, onAppStatusChange],
     );
 
     return (

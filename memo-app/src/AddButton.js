@@ -1,17 +1,22 @@
 import "./App.css";
+import { useLoginStatus } from "./LoginContext.js";
 
-function AddButton({ onMemoAdd, onStatusChange }) {
+function AddButton({ onMemoAdd, onAppStatusChange }) {
+  const { loggedIn } = useLoginStatus();
+
   return (
-    <div className="add-button">
-      <button
-        onClick={() => {
-          onMemoAdd("新規メモ");
-          onStatusChange("isEditing");
-        }}
-      >
-        +
-      </button>
-    </div>
+    loggedIn && (
+      <div className="add-button">
+        <button
+          onClick={() => {
+            onMemoAdd("新規メモ");
+            onAppStatusChange("isEditing");
+          }}
+        >
+          +
+        </button>
+      </div>
+    )
   );
 }
 
